@@ -50,7 +50,7 @@ For large scale post-training (on PubMed data):
 
 ```bash
 python post_train.py \
-    --output_dir models/posttrain-roberta-pubmed 
+	--output_dir models/posttrain-roberta-pubmed 
 ```
 
 This will save all the checkpoints during training into the directory `models/posttrain-roberta-pubmed-base `.
@@ -68,8 +68,8 @@ For small scale post-training (task-adaption on BioASQ/CHEMPROT data):
 ```bash
 python post_train.py  \
 	--post_type adapt  \
-    --load_model_path models/posttrain-roberta-pubmed/checkpoint-93000  \
-    --output_dir models/adapttrain-roberta-pubmed
+	--load_model_path models/posttrain-roberta-pubmed/checkpoint-93000  \
+	--output_dir models/adapttrain-roberta-pubmed
 ```
 
 ### Fine-tuning
@@ -105,7 +105,7 @@ Moreover, we can use the model after PubMed post-training and task-adaption.
 python fine_tune.py  \
 	--load_model_path models/adapttrain-roberta-pubmed/checkpoint-1000  \
 	--dataset_name chemprot  \
-    --output_dir output/finetune_posttrain_adapttrain_chemprot
+	--output_dir output/finetune_posttrain_adapttrain_chemprot
 ```
 
 You can also adjust training arguments such as training epochs `--num_train_epochs` and batch size `--per_device_train_batch_size` . For a detailed view of all training arguments, please see https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py.
@@ -128,7 +128,7 @@ Then let's train a tokenizer and merge it with roberta's tokenizer.
 
 ```bash
 python create_tokenizers.py  \
-    --merged_tokenizer_output tokenizers/merged_pubmed_roberta
+	--merged_tokenizer_output tokenizers/merged_pubmed_roberta
 ```
 
 You can also specify other arguments such as the vocab size and max added words.
@@ -158,8 +158,8 @@ For example, add extra words during post training with extra embedding initializ
 ```bash
 python post_train.py  \
 	--output_dir models/posttrain-roberta-pubmed-merged  \
-    --use_merged_tokenizer True  \
-    --load_tok_path tokenizers/merged_pubmed_roberta
+	--use_merged_tokenizer True  \
+	--load_tok_path tokenizers/merged_pubmed_roberta
 ```
 
 
@@ -169,7 +169,7 @@ python post_train.py  \
 
 
 ## Acknowledgement
-
+https://github.com/huggingface/transformers.git
 
 
 ## Reference
