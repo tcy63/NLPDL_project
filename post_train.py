@@ -15,7 +15,6 @@ from prepare_data import get_post_dataset, get_adapt_dataset
 # from prepare_posttrain_data import get_dataset
 import os.path as osp
 from dataclasses import dataclass, field
-from typing import Optional
 import logging
 import sys
 import wandb
@@ -49,7 +48,7 @@ class ModelArguments:
     """
     Arguments pertaining to our model configuration.
     """
-    load_model_path: Optional[str] = field(
+    load_model_path: str = field(
         default="roberta-base",
         metadata={"help": "The path to the pretrained model."}
     )
@@ -61,7 +60,7 @@ class ProjectArguments:
     """
     Arguments pertaining to wandb project record.
     """
-    project_name: Optional[str] = field(
+    project_name: str = field(
         default="nlpdl-final-project-post",
         metadata={"help": "Project name in wandb"}
     )
@@ -78,7 +77,7 @@ class TokenizerArguments:
         metadata={"help": "The path to the pretrained tokenizer."}
     )
     embedding_init_type: str = field(
-        default="rnd",
+        default="mean",
         metadata={"help": "If using merged tokenizer, which type of initialization to use."}
     )
   

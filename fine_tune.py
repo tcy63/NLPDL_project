@@ -7,27 +7,18 @@ import torch
 import logging
 import sys
 import numpy as np
-from typing import Optional
 import datasets
 import evaluate
 from transformers import (
     HfArgumentParser, 
     set_seed,
-    AutoConfig, 
     AutoTokenizer, 
-    PreTrainedTokenizer,
-    PreTrainedTokenizerFast,
-    RobertaTokenizerFast,
-    RobertaTokenizer,
-    AutoModelForSequenceClassification,
     RobertaForSequenceClassification,
     DataCollatorWithPadding,
     EvalPrediction,
     TrainingArguments,
     Trainer
 )
-from tokenizers import Tokenizer
-from tokenizers.implementations import BaseTokenizer
 from dataclasses import dataclass, field
 import wandb
 
@@ -65,11 +56,11 @@ class ModelArguments:
     """
     Arguments pertaining to our model configuration.
     """
-    use_posttrained_model: Optional[bool] = field(
+    use_posttrained_model: bool = field(
         default=False,
         metadata={"help": "Whether to use the post trained version. If False, load pretrained roberta provided by huggingface directly."}
     )
-    load_model_path: Optional[str] = field(
+    load_model_path: str = field(
         default="roberta-base",
         metadata={"help": "The path to the pretrained/posttrained checkpoint."}
     )
@@ -81,7 +72,7 @@ class ProjectArguments:
     """
     Arguments pertaining to wandb project record.
     """
-    project_name: Optional[str] = field(
+    project_name: str = field(
         default="nlpdl-final-project-basic",
         metadata={"help": "Project name in wandb"}
     )

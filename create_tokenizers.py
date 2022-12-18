@@ -31,22 +31,21 @@ from dataclasses import (
     dataclass, 
     field
 )
-import typing
 import sys
 import os
 
 @dataclass
 class TokenizerArguments:
     do_train: bool=field(
-        default=False,
+        default=True,
         metadata={"help": "whether to train the specific toeknizer."}
     )
-    data_files: typing.List[str]=field(
+    data_file: str=field(
         default="pubmed_base.txt",
         metadata={"help": "file or files used to train the tokenizer."}
     )
     tok_type: str=field(
-        default=None,
+        default="wordpiece",
         metadata={"help": "the type of tokenizer."}
     )
     specific_tokenizer_output: str=field(
@@ -62,7 +61,7 @@ class TokenizerArguments:
         metadata={"help": "the size of the vocab."}
     )
     do_merge: bool=field(
-        default=False,
+        default=True,
         metadata={"help": "whether to merge the specific toeknizer with default roberta tokenizer."}
     )
     max_added_words: int=field(
@@ -80,7 +79,9 @@ class TokenizerArguments:
         
 
 
-def train_tokenizer(files, tok_type, vocab_size=30000):
+def train_tokenizer(file, tok_type, vocab_size=30000):
+    files = []
+    files.append(file)
     Models = {
         "wordpiece": WordPiece,
         "bpe": BPE
@@ -139,16 +140,13 @@ def merge_tokenizer(general_tokenizer, specific_tokenizer, max_added_words):
 def main():
     parser = HfArgumentParser([TokenizerArguments])
     tok_args = parser.parse_args_into_dataclasses()[0]
-    
+
     '''
     train a new tokenizer on specific corpus
     '''
     if tok_args.do_train:
-        if tok_args.data_files == None:
-            print("Please enter the specific corpus on which you want to train your tokenizer.")
-            sys.exit()
         print(f"------Train a specific tokenizer with vocabulary size {tok_args.vocab_size}------")
-        tokenizer = train_tokenizer(tok_args.data_files, tok_args.tok_type, tok_args.vocab_size)
+        tokenizer = train_tokenizer(tok_args.data_file, tok_args.tok_type, tok_args.vocab_size)
         if tok_args.specific_tokenizer_output != None:
             print(f"------Save specific tokenizer to {tok_args.specific_tokenizer_output}------")
             tokenizer.save(tok_args.specific_tokenizer_output) # in json format
