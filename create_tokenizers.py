@@ -42,7 +42,7 @@ class TokenizerArguments:
         metadata={"help": "whether to train the specific toeknizer."}
     )
     data_files: typing.List[str]=field(
-        default=None,
+        default="pubmed_base.txt",
         metadata={"help": "file or files used to train the tokenizer."}
     )
     tok_type: str=field(
