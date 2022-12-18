@@ -4,6 +4,12 @@
 
 This repository is the final project for course NLPDL, 2022 Fall.
 
+## Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Overview
 
 ### Motivation
@@ -14,17 +20,17 @@ Large-scale pre-trained language models have achieved remarkable success in the 
 
 In this project, we focus on the medical domain. 
 
-The RoBERTa model is loaded from huggingface as required.
+The RoBERTa [[1]](#1) model is loaded from huggingface as required.
 
-The performance is measured on two downstream tasks, CHEMPROT and BioASQ.
+The performance is measured on two downstream tasks, ChemProt and BioASQ.
 
 1. post-training
 
-   We use domain-specific data from PubMed. The pre-trained RoBERTa model is post-trained on this corpus by MLM (masked language modeling).
+   We use domain-specific data from PubMed (for more information of the text we use, see acknowledgement). The pre-trained RoBERTa model is post-trained on this corpus by MLM (masked language modeling).
 
 2. task-adaption
 
-   We use domain-specific data from downstream tasks, CHEMPROT and BioASQ. The post-trained model can be further post-trained on this corpus by MLM (masked language modeling).
+   We use domain-specific data from downstream tasks, ChemProt and BioASQ. The post-trained model can be further post-trained on this corpus by MLM (masked language modeling). This idea is proved useful [[2]](#2).
 
 3. vocabulary-expansion
 
@@ -53,7 +59,7 @@ python post_train.py \
 	--output_dir models/posttrain-roberta-pubmed 
 ```
 
-This will save all the checkpoints during training into the directory `models/posttrain-roberta-pubmed-base `.
+This will save all the checkpoints during training into the directory `models/posttrain-roberta-pubmed`.
 
 ### Small-scale task-adaption
 
@@ -63,7 +69,7 @@ Let's use the post-trained model from last step. Here, we choose `models/posttra
 
 For task-adaption, we need to specify `--post_type adapt`.
 
-For small scale post-training (task-adaption on BioASQ/CHEMPROT data):
+For small scale post-training (task-adaption on BioASQ/ChemProt data):
 
 ```bash
 python post_train.py  \
@@ -133,7 +139,7 @@ python create_tokenizers.py  \
 
 You can also specify other arguments such as the vocab size and max added words.
 
-You may get the output information as follows:
+You may get the output information as follows if you specify `--vocab_size 1000 --max_added_words 500`:
 
 ```
 ------Train a specific tokenizer with vocabulary size 1000------
@@ -163,14 +169,20 @@ python post_train.py  \
 ```
 
 
-
-## Requirements
-
-
-
 ## Acknowledgement
-https://github.com/huggingface/transformers.git
+The corpus we provide here is a smaller version of the preprocessed PubMed texts provided by https://github.com/ncbi-nlp/bluebert.git. Ours is approximately 130M.
 
+A large part of this project is dependent on huggingface https://github.com/huggingface/transformers.git.
+
+The idea of embedding initialization is partly credited to https://nlp.stanford.edu/~johnhew/vocab-expansion.html
 
 ## Reference
+<a id="1">[1]</a> 
+Liu, Y., Ott, M., Goyal, N., Du, J., Joshi, M., Chen, D., ... & Stoyanov, V. (2019). 
+Roberta: A robustly optimized bert pretraining approach. 
+arXiv preprint arXiv:1907.11692.
 
+<a id="2">[2]</a>
+Gururangan, S., Marasović, A., Swayamdipta, S., Lo, K., Beltagy, I., Downey, D., & Smith, N. A. (2020). 
+Don't stop pretraining: adapt language models to domains and tasks. 
+arXiv preprint arXiv:2004.10964.
