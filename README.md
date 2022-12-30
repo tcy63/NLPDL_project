@@ -30,7 +30,7 @@ The performance is measured on two downstream tasks, ChemProt and BioASQ.
 
 2. task-adaption
 
-   We use domain-specific data from downstream tasks, ChemProt and BioASQ. The post-trained model can be further post-trained on this corpus by MLM (masked language modeling). This idea is proved useful [[2]](#2).
+   We use domain-specific data from downstream tasks, ChemProt and BioASQ. Both the pre-trained RoBERTa and the post-trained model can be trained on this corpus by MLM. This idea is proved useful [[2]](#2).
 
 3. vocabulary-expansion
 
@@ -63,7 +63,7 @@ This will save all the checkpoints during training into the directory `models/po
 
 ### Small-scale task-adaption
 
-After post-training, experiments show that smaller-scale post-training on task data can further improve the performance.
+Experiments show that smaller-scale post-training on task data can further improve the performance after post-training on PubMed data.
 
 Let's use the post-trained model from last step. Here, we choose `models/posttrain-roberta-pubmed/checkpoint-93000` as an example.
 
@@ -76,6 +76,14 @@ python post_train.py  \
 	--post_type adapt  \
 	--load_model_path models/posttrain-roberta-pubmed/checkpoint-93000  \
 	--output_dir models/adapttrain-roberta-pubmed
+```
+
+In addition, only task-adaption without post-training also has performance gains.
+```bash
+python post_train.py  \
+	--post_type adapt  \
+	--load_model_path roberta-base  \
+	--output_dir models/adapttrain-roberta
 ```
 
 ### Fine-tuning
@@ -113,6 +121,16 @@ python fine_tune.py  \
 	--dataset_name chemprot  \
 	--output_dir output/finetune_posttrain_adapttrain_chemprot
 ```
+
+And the task-adaption only model. Only 500 steps of adation can result in performance improvement.
+
+```bash
+python fine_tune.py  \
+	--load_model_path models/adapttrain-roberta/checkpoint-500  \
+	--dataset_name chemprot  \
+	--output_dir output/finetune_adapttrain_chemprot
+```
+
 
 You can also adjust training arguments such as training epochs `--num_train_epochs` and batch size `--per_device_train_batch_size` . For a detailed view of all training arguments, please see https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py.
 
